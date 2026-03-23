@@ -1,19 +1,29 @@
 {
   "name": "1sat-app",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "frontend",
-    "mobile"
-  ],
+  "type": "module",
   "scripts": {
-    "dev": "bun --filter frontend dev",
-    "build:frontend": "bun --filter frontend build",
-    "mobile:open:ios": "cd mobile && bun cap open ios",
-    "mobile:open:android": "cd mobile && bun cap open android",
-    "mobile:sync": "cd mobile && bun cap sync",
-    "mobile:run:ios": "cd mobile && bun cap run ios --livereload --external"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write ."
   },
-  "devDependencies": {},
-  "packageManager": "bun@latest"
+  "dependencies": {
+    "geist": "^1.7.0",
+    "next": "^16.0.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.2",
+    "@tailwindcss/postcss": "^4.1.16",
+    "@types/bun": "latest",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.16",
+    "typescript": "^5.9.3"
+  }
 }
