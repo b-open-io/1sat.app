@@ -1,0 +1,19 @@
+{
+  "name": "1sat-app",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "mobile"
+  ],
+  "scripts": {
+    "dev": "bun --filter frontend dev",
+    "build:frontend": "bun --filter frontend build",
+    "mobile:open:ios": "cd mobile && bun cap open ios",
+    "mobile:open:android": "cd mobile && bun cap open android",
+    "mobile:sync": "cd mobile && bun cap sync",
+    "mobile:run:ios": "cd mobile && bun cap run ios --livereload --external"
+  },
+  "devDependencies": {},
+  "packageManager": "bun@latest"
+}
