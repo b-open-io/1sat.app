@@ -1,0 +1,70 @@
+"use client"
+
+import { useReveal } from "@/hooks/useReveal"
+import { FeatureCarousel } from "@/components/FeatureCarousel"
+
+interface Slide {
+  title: string
+  description: string
+}
+
+interface FeatureSectionProps {
+  keyword: string
+  subtitle: string
+  slides: Slide[]
+  gradientColors: [string, string, string]
+  id?: string
+}
+
+export function FeatureSection({
+  keyword,
+  subtitle,
+  slides,
+  gradientColors,
+  id,
+}: FeatureSectionProps) {
+  const sectionRef = useReveal<HTMLElement>(0.1)
+
+  const [c1, c2, c3] = gradientColors
+
+  return (
+    <section
+      id={id}
+      ref={sectionRef}
+      className="reveal w-full max-w-5xl mx-auto px-4 md:px-8 py-24 md:py-32 flex flex-col gap-12"
+    >
+      {/* Heading */}
+      <div className="flex flex-col gap-4 text-center">
+        <h2
+          className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight"
+          style={{ color: "rgba(255,255,255,0.9)" }}
+        >
+          1Sat is for{" "}
+          <span
+            className="chroma-text visible"
+            style={{
+              backgroundImage: `linear-gradient(90deg, ${c1}, ${c2}, ${c3}, ${c1})`,
+              backgroundSize: "300% 100%",
+            }}
+          >
+            {keyword}
+          </span>
+        </h2>
+
+        <p
+          className="text-base md:text-lg max-w-xl mx-auto leading-relaxed"
+          style={{ color: "rgba(255,255,255,0.4)" }}
+        >
+          {subtitle}
+        </p>
+      </div>
+
+      {/* Carousel */}
+      <FeatureCarousel
+        slides={slides}
+        gradientFrom={c1}
+        gradientTo={c2}
+      />
+    </section>
+  )
+}
