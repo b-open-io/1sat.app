@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   reactCompiler: false,
   turbopack: {
     resolveAlias: {
-      '@': './app',
+      '@': './',
     },
   },
 }
