@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.png',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
         alt: '1Sat Browser — Your keys. Your data. Your internet.',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     title: '1Sat Browser — Your keys. Your data. Your internet.',
     description:
       'The browser that pays you back. Browse, collect, and own your internet with Secure Enclave protection, on-chain publishing, and native dApp connectivity.',
-    images: ['/og-image.png'],
+    images: ['/og-image.jpg'],
   },
   icons: {
     icon: [
