@@ -23,13 +23,28 @@ void main() {
   vec2 uv = gl_FragCoord.xy / uResolution.xy;
   uv.y = 1.0 - uv.y;
   vec3 col = texture(uTex, uv).rgb;
+
+  // Warm color grading
   col.r *= 1.05;
   col.b *= 0.95;
+
+  // Scan lines — faint horizontal lines, retro-tech feel
+  float scanline = sin(gl_FragCoord.y * 1.5) * 0.04 + 0.96;
+  col *= scanline;
+
+  // Subtle scan line flicker over time
+  float flicker = sin(uTime * 2.0 + uv.y * 40.0) * 0.015 + 0.985;
+  col *= flicker;
+
+  // Vignette
   vec2 center = uv - 0.5;
   float vignette = 1.0 - dot(center, center) * 0.8;
   col *= vignette;
+
+  // Film grain
   float grain = hash(gl_FragCoord.xy + uTime * 100.0) * 0.06 - 0.03;
   col += grain;
+
   fragColor = vec4(col, 1.0);
 }`
 

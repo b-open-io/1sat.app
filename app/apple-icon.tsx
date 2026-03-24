@@ -1,32 +1,34 @@
 import { ImageResponse } from 'next/og'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
 export const size = { width: 180, height: 180 }
 export const contentType = 'image/png'
 
-export default function AppleIcon() {
+export default async function AppleIcon() {
+  const iconData = await readFile(join(process.cwd(), 'public/icon-512.png'))
+  const base64 = iconData.toString('base64')
+
   return new ImageResponse(
     (
       <div
         style={{
           width: 180,
           height: 180,
-          borderRadius: 40,
-          background: 'linear-gradient(135deg, #FF8C00, #FFD700)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <div
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: '50%',
-            border: '14px solid white',
-          }}
+        {/* biome-ignore lint: using img for OG image generation */}
+        <img
+          src={`data:image/png;base64,${base64}`}
+          width={180}
+          height={180}
+          style={{ borderRadius: 40 }}
         />
       </div>
     ),
-    { ...size }
+    { ...size },
   )
 }

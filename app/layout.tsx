@@ -1,4 +1,5 @@
 import { GeistMono } from 'geist/font/mono'
+import { GeistPixelLine } from 'geist/font/pixel'
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next'
 import './globals.css'
@@ -72,7 +73,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${GeistPixelLine.variable}`}>
       <head>
         <meta name="theme-color" content="#050505" />
         <meta name="color-scheme" content="dark" />

@@ -1,32 +1,34 @@
 import { ImageResponse } from 'next/og'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
 export const size = { width: 32, height: 32 }
 export const contentType = 'image/png'
 
-export default function Icon() {
+export default async function Icon() {
+  const iconData = await readFile(join(process.cwd(), 'public/icon-128.png'))
+  const base64 = iconData.toString('base64')
+
   return new ImageResponse(
     (
       <div
         style={{
           width: 32,
           height: 32,
-          borderRadius: 8,
-          background: 'linear-gradient(135deg, #FF8C00, #FFD700)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <div
-          style={{
-            width: 14,
-            height: 14,
-            borderRadius: '50%',
-            border: '2.5px solid white',
-          }}
+        {/* biome-ignore lint: using img for OG image generation */}
+        <img
+          src={`data:image/png;base64,${base64}`}
+          width={32}
+          height={32}
+          style={{ borderRadius: 6 }}
         />
       </div>
     ),
-    { ...size }
+    { ...size },
   )
 }

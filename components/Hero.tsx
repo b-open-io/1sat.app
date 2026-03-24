@@ -1,5 +1,7 @@
 import { DOWNLOAD_URL } from '@/components/constants'
+import { LogoMark } from '@/components/LogoMark'
 import { ShaderBackgroundClient } from '@/components/effects/ShaderBackgroundClient'
+import { GeistPixelLine } from 'geist/font/pixel'
 
 const pulseRings: Array<{ size: number; opacity: number; delay: string }> = [
   { size: 500, opacity: 0.06, delay: '0s' },
@@ -61,14 +63,10 @@ export function Hero() {
       />
 
       <div className="relative z-[5] flex h-full flex-col items-center justify-center text-center">
-        {/* Decorative brand icon — hidden from assistive technology */}
-        <div
-          aria-hidden="true"
-          className="mb-6 flex h-14 w-14 items-center justify-center rounded-[14px] bg-gradient-to-br from-[#FF8C00] to-[#FFD700] shadow-[0_0_40px_rgba(255,140,0,0.3)]"
-        >
-          <div className="h-[22px] w-[22px] rounded-full border-[3px] border-white" />
+        <div className="mb-6 shadow-[0_0_40px_rgba(255,140,0,0.3)]">
+          <LogoMark size="lg" />
         </div>
-        <h1 className="font-mono text-5xl font-extralight tracking-[-2px] text-white md:text-7xl lg:text-8xl">
+        <h1 className={`${GeistPixelLine.className} text-5xl font-medium tracking-[-2px] text-white md:text-7xl lg:text-8xl`}>
           1Sat Browser
         </h1>
         <p className="mt-4 text-sm font-light tracking-wide text-foreground-tertiary md:text-base">
