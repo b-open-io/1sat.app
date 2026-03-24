@@ -3,8 +3,7 @@ import { redirect } from 'next/navigation'
 const DOWNLOAD_JSON_URL =
   'https://dbopkrmhgavaffea.public.blob.vercel-storage.com/releases/download.json'
 
-const GITHUB_RELEASES_URL =
-  'https://github.com/b-open-io/1sat-sdk/releases/latest'
+const GITHUB_RELEASES_URL = 'https://github.com/b-open-io/1sat-sdk/releases/latest'
 
 export async function GET() {
   try {

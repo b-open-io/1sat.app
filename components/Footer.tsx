@@ -1,6 +1,3 @@
-'use client'
-
-import { useState } from 'react'
 import { LogoMark } from '@/components/LogoMark'
 import { externalLinkProps } from '@/components/link-utils'
 
@@ -11,19 +8,6 @@ const links = [
 ]
 
 export function Footer() {
-  const [copied, setCopied] = useState(false)
-
-  const handleCopyDocs = async () => {
-    const nav = document.querySelector('nav[aria-label="Main navigation"]')
-    const docsButton = nav?.querySelector('button')
-    if (docsButton) {
-      docsButton.click()
-    } else {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    }
-  }
-
   return (
     <footer className="w-full px-4 md:px-8 py-6 border-t border-glass-border">
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">

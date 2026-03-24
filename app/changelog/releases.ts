@@ -33,21 +33,16 @@ export async function getReleases(): Promise<GitHubRelease[]> {
       headers.Authorization = `token ${process.env.GITHUB_TOKEN}`
     }
 
-    const response = await fetch(
-      `https://api.github.com/repos/${GITHUB_REPO}/releases`,
-      {
-        headers,
-        next: { revalidate: 300 },
-      },
-    )
+    const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases`, {
+      headers,
+      next: { revalidate: 300 },
+    })
 
     if (!response.ok) return []
 
     const all: GitHubRelease[] = await response.json()
     return all.sort(
-      (a, b) =>
-        new Date(b.published_at).getTime() -
-        new Date(a.published_at).getTime(),
+      (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime(),
     )
   } catch {
     return []

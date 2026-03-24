@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Footer } from '@/components/Footer'
 import { Nav } from '@/components/Nav'
-import { getReleases, isStableRelease, type GitHubRelease } from './releases'
+import { type GitHubRelease, getReleases, isStableRelease } from './releases'
 
 export const metadata: Metadata = {
   title: 'Changelog — 1Sat',
@@ -66,7 +66,10 @@ function ReleaseCard({ release, isLatest }: { release: GitHubRelease; isLatest: 
           </span>
         </div>
 
-        <div className="flex items-center gap-4 text-sm mb-3" style={{ color: 'rgba(255,255,255,0.38)' }}>
+        <div
+          className="flex items-center gap-4 text-sm mb-3"
+          style={{ color: 'rgba(255,255,255,0.38)' }}
+        >
           <span className="inline-flex items-center gap-1.5">
             {formatDate(release.published_at)}
           </span>
@@ -112,7 +115,10 @@ export default async function ChangelogPage() {
       <div className="max-w-3xl mx-auto px-4 md:px-6 pt-32 pb-24">
         {/* Page header */}
         <div className="mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium mb-6" style={{ background: 'rgba(59,130,246,0.1)', color: '#3b82f6' }}>
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium mb-6"
+            style={{ background: 'rgba(59,130,246,0.1)', color: '#3b82f6' }}
+          >
             <span>{releases.length} releases</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground">
@@ -165,7 +171,10 @@ export default async function ChangelogPage() {
 
         {/* Release timeline */}
         <div className="relative">
-          <div className="absolute left-[19px] top-2 bottom-2 w-px" style={{ background: 'rgba(255,255,255,0.08)' }} />
+          <div
+            className="absolute left-[19px] top-2 bottom-2 w-px"
+            style={{ background: 'rgba(255,255,255,0.08)' }}
+          />
           <div className="space-y-0">
             {releases.map((release, index) => (
               <ReleaseCard key={release.id} release={release} isLatest={index === 0} />
@@ -175,7 +184,10 @@ export default async function ChangelogPage() {
 
         {/* Footer CTA */}
         {releases.length > 0 && (
-          <div className="mt-12 pt-8 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <div
+            className="mt-12 pt-8 text-center"
+            style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
+          >
             <p className="text-sm mb-4" style={{ color: 'rgba(255,255,255,0.38)' }}>
               View the full source on GitHub
             </p>

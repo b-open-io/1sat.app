@@ -14,7 +14,13 @@ export function LogoMark({ size = 'md' }: LogoMarkProps) {
     <div
       aria-hidden="true"
       className="relative flex-shrink-0"
-      style={{ width: px, height: px, borderRadius: radius, background: '#2a2a2a', overflow: 'hidden' }}
+      style={{
+        width: px,
+        height: px,
+        borderRadius: radius,
+        background: '#2a2a2a',
+        overflow: 'hidden',
+      }}
     >
       {/* Black ring with white edge border */}
       <div

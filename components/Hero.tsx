@@ -1,7 +1,7 @@
-import { DOWNLOAD_URL } from '@/components/constants'
-import { LogoMark } from '@/components/LogoMark'
-import { ShaderBackgroundClient } from '@/components/effects/ShaderBackgroundClient'
 import { GeistPixelLine } from 'geist/font/pixel'
+import { DOWNLOAD_URL } from '@/components/constants'
+import { ShaderBackgroundClient } from '@/components/effects/ShaderBackgroundClient'
+import { LogoMark } from '@/components/LogoMark'
 
 const pulseRings: Array<{ size: number; opacity: number; delay: string }> = [
   { size: 500, opacity: 0.06, delay: '0s' },
@@ -66,7 +66,9 @@ export function Hero() {
         <div className="mb-6 drop-shadow-[0_0_30px_rgba(240,187,0,0.4)]">
           <LogoMark size="lg" />
         </div>
-        <h1 className={`${GeistPixelLine.className} text-5xl font-medium tracking-[-2px] text-white md:text-7xl lg:text-8xl`}>
+        <h1
+          className={`${GeistPixelLine.className} text-5xl font-medium tracking-[-2px] text-white md:text-7xl lg:text-8xl`}
+        >
           1Sat Browser
         </h1>
         <p className="mt-4 text-sm font-light tracking-wide text-foreground-tertiary md:text-base">

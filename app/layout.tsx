@@ -62,18 +62,17 @@ export const metadata: Metadata = {
     images: ['/og-image.jpg'],
   },
   icons: {
-    icon: [
-      { url: '/icon', type: 'image/png', sizes: '32x32' },
-    ],
-    apple: [
-      { url: '/apple-icon', type: 'image/png', sizes: '180x180' },
-    ],
+    icon: [{ url: '/icon', type: 'image/png', sizes: '32x32' }],
+    apple: [{ url: '/apple-icon', type: 'image/png', sizes: '180x180' }],
   },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${GeistPixelLine.variable}`}>
+    <html
+      lang="en"
+      className={`${GeistSans.variable} ${GeistMono.variable} ${GeistPixelLine.variable}`}
+    >
       <head>
         <meta name="theme-color" content="#050505" />
         <meta name="color-scheme" content="dark" />
