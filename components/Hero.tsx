@@ -63,7 +63,7 @@ export function Hero() {
       />
 
       <div className="relative z-[5] flex h-full flex-col items-center justify-center text-center">
-        <div className="mb-6 shadow-[0_0_40px_rgba(255,140,0,0.3)]">
+        <div className="mb-6 drop-shadow-[0_0_30px_rgba(240,187,0,0.4)]">
           <LogoMark size="lg" />
         </div>
         <h1 className={`${GeistPixelLine.className} text-5xl font-medium tracking-[-2px] text-white md:text-7xl lg:text-8xl`}>

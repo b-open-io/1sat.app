@@ -1,26 +1,46 @@
-import Image from 'next/image'
-
 interface LogoMarkProps {
   size?: 'sm' | 'md' | 'lg'
 }
 
-const pxSizes = {
-  sm: 20,
-  md: 24,
-  lg: 56,
+const config = {
+  sm: { px: 20, radius: '22%', ring: 0.82, gold: 0.58, border: 1 },
+  md: { px: 24, radius: '22%', ring: 0.82, gold: 0.58, border: 1.5 },
+  lg: { px: 56, radius: '22%', ring: 0.82, gold: 0.58, border: 2.5 },
 }
 
 export function LogoMark({ size = 'md' }: LogoMarkProps) {
-  const px = pxSizes[size]
+  const { px, radius, ring, gold, border } = config[size]
   return (
-    <Image
-      src="/icon-128.png"
-      alt=""
+    <div
       aria-hidden="true"
-      width={px}
-      height={px}
-      className="flex-shrink-0"
-      style={{ borderRadius: size === 'lg' ? 14 : size === 'md' ? 8 : 6 }}
-    />
+      className="relative flex-shrink-0"
+      style={{ width: px, height: px, borderRadius: radius, background: '#2a2a2a', overflow: 'hidden' }}
+    >
+      {/* Black ring with white edge border */}
+      <div
+        className="absolute rounded-full"
+        style={{
+          width: px * ring,
+          height: px * ring,
+          background: '#111',
+          border: `${border}px solid white`,
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      />
+      {/* Gold circle with white border */}
+      <div
+        className="absolute rounded-full"
+        style={{
+          width: px * gold,
+          height: px * gold,
+          background: '#F0BB00',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      />
+    </div>
   )
 }
