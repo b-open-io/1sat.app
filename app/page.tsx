@@ -108,9 +108,30 @@ const features: FeatureSectionProps[] = [
   },
 ]
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: '1Sat Browser',
+  description:
+    'The browser that pays you back. Browse, collect, and own your internet with Secure Enclave protection.',
+  url: 'https://1sat.app',
+  applicationCategory: 'BrowserApplication',
+  operatingSystem: 'macOS',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+}
+
 export default function Home() {
   return (
     <main id="main-content" className="bg-background min-h-screen overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: controlled static JSON-LD, no user input
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Nav />
       <Hero />
 
