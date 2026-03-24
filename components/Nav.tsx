@@ -6,34 +6,54 @@ import { DownloadIcon } from '@/components/DownloadIcon'
 import { LogoMark } from '@/components/LogoMark'
 import { externalLinkProps } from '@/components/link-utils'
 
-const DOCS_PROMPT = `# 1Sat Browser — Developer Setup
+const DOCS_PROMPT = `# 1Sat SDK — AI Developer Setup
 
-## 1. Load the LLMs context file
-Fetch https://raw.githubusercontent.com/b-open-io/1sat-sdk/master/packages/wallet-desktop/llms.txt for project documentation.
+## 1. Load context (any LLM)
+Fetch the project context file to give your AI assistant full SDK knowledge:
+https://raw.githubusercontent.com/b-open-io/1sat-sdk/master/packages/wallet-desktop/llms.txt
 
-## 2. Install the 1Sat skill plugin (Claude Code)
+## 2. Install the 1Sat plugin (Claude Code)
 \`\`\`bash
 claude plugin install 1sat@b-open-io
 \`\`\`
 
-This gives you skills for:
-- 1sat-stack (unified BSV indexing API)
-- Ordinals marketplace (list/buy/cancel)
-- BSV21 token operations
-- Wallet setup (BRC-100)
-- Transaction building
-- dApp wallet connection
-- OpNS names
-- File inscription & media extraction
-- CLI tool
-
-## 3. Install the 1Sat skill (any AI tool)
+## 3. Install individual skills (any AI tool — Claude Code, Cursor, Gemini CLI, VS Code, etc.)
 \`\`\`bash
-npx skills add https://github.com/b-open-io/1sat-sdk --skill 1sat-stack
+npx skills add https://github.com/b-open-io/1sat-sdk --skill <skill-name>
 \`\`\`
 
-## 4. Start building
-Ask your AI assistant to use the 1sat skills to build with the 1Sat SDK.
+## Available Skills
+
+| Skill | What it does |
+|-------|-------------|
+| 1sat-stack | Unified BSV indexing API — UTXOs, inscriptions, ordinals, token balances |
+| 1sat-cli | CLI tool for wallet ops, minting, tokens, listings from the terminal |
+| ordinals-marketplace | List, buy, cancel ordinal listings on the marketplace |
+| token-operations | BSV21 token deployment, minting, transfers |
+| transaction-building | Build BSV transactions — payments, OP_RETURN, custom scripts |
+| wallet-setup | Create wallets, sync addresses, configure storage, restore from backup |
+| wallet-create-ordinals | Mint ordinals and inscribe files from a wallet |
+| dapp-connect | Connect dApps to 1Sat wallet via popup or browser extension |
+| sweep-import | Sweep/import UTXOs and ordinals from external wallets |
+| opns-names | Register and manage OpNS (on-chain DNS) names |
+| timelock | Lock BSV with time-based release conditions |
+| extract-blockchain-media | Extract inscribed media (images, videos, files) from transactions |
+| pow20-mining | Mine POW20 tokens with proof-of-work |
+
+## SDK Packages (npm)
+\`\`\`
+@1sat/actions    — High-level ordinal/token actions
+@1sat/client     — API client for 1sat-stack
+@1sat/connect    — dApp wallet connection
+@1sat/react      — React hooks for wallet integration
+@1sat/types      — Shared TypeScript types
+@1sat/utils      — Utility functions
+@1sat/wallet     — Core wallet logic
+@1sat/templates  — Script templates
+\`\`\`
+
+## Quick start
+Ask your AI: "Use the 1sat-stack skill to fetch ordinals for an address" or "Use transaction-building to send BSV"
 `
 
 const navLinks = [
