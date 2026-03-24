@@ -4,10 +4,10 @@ import { LogoMark } from '@/components/LogoMark'
 import { externalLinkProps } from '@/components/link-utils'
 
 const navLinks = [
-  { label: 'Features', href: '#features', external: false },
+  { label: 'Features', href: '/#features', external: false },
   { label: 'Changelog', href: '/changelog', external: false },
   { label: 'GitHub', href: 'https://github.com/b-open-io/1sat-sdk', external: true },
-  { label: 'Docs', href: '#docs', external: false },
+  { label: 'Docs', href: 'https://docs.1sat.market', external: true },
 ]
 
 export function Nav() {
@@ -17,12 +17,12 @@ export function Nav() {
         aria-label="Main navigation"
         className="pointer-events-auto flex items-center gap-6 px-4 py-2.5 rounded-full border border-glass-border bg-glass-surface backdrop-blur-[24px]"
       >
-        <div className="flex items-center gap-2.5">
+        <a href="/" className="flex items-center gap-2.5">
           <LogoMark />
           <span className="text-sm font-semibold tracking-tight font-mono text-foreground">
             1Sat
           </span>
-        </div>
+        </a>
 
         <div className="hidden md:block w-px h-4 self-center bg-foreground-quaternary" />
 
