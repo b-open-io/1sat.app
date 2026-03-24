@@ -4,6 +4,7 @@ import { externalLinkProps } from '@/components/link-utils'
 const links = [
   { label: 'GitHub', href: 'https://github.com/b-open-io/1sat-sdk', external: true },
   { label: 'Docs', href: '#docs', external: false },
+  { label: 'Changelog', href: '/changelog', external: false },
   { label: 'Twitter', href: 'https://twitter.com/1satordinals', external: true },
 ]
 
