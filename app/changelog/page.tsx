@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Calendar, ExternalLink, Tag } from 'lucide-react'
 import { Footer } from '@/components/Footer'
 import { Nav } from '@/components/Nav'
 import { getReleases, isStableRelease, type GitHubRelease } from './releases'
@@ -69,7 +68,6 @@ function ReleaseCard({ release, isLatest }: { release: GitHubRelease; isLatest: 
 
         <div className="flex items-center gap-4 text-sm mb-3" style={{ color: 'rgba(255,255,255,0.38)' }}>
           <span className="inline-flex items-center gap-1.5">
-            <Calendar className="h-3.5 w-3.5" />
             {formatDate(release.published_at)}
           </span>
           <span>{formatRelativeDate(release.published_at)}</span>
@@ -79,7 +77,6 @@ function ReleaseCard({ release, isLatest }: { release: GitHubRelease; isLatest: 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors duration-200"
           >
-            <ExternalLink className="h-3.5 w-3.5" />
             GitHub
           </a>
         </div>
@@ -116,7 +113,6 @@ export default async function ChangelogPage() {
         {/* Page header */}
         <div className="mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium mb-6" style={{ background: 'rgba(59,130,246,0.1)', color: '#3b82f6' }}>
-            <Tag className="h-3.5 w-3.5" />
             <span>{releases.length} releases</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground">
@@ -191,7 +187,6 @@ export default async function ChangelogPage() {
               style={{ border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)' }}
             >
               View on GitHub
-              <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </div>
         )}
