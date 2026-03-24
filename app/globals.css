@@ -2,12 +2,14 @@
 
 :root {
   --background: #050505;
-  --foreground: rgba(255, 255, 255, 0.90);
-  --foreground-secondary: rgba(255, 255, 255, 0.60);
-  --foreground-tertiary: rgba(255, 255, 255, 0.40);
-  --foreground-quaternary: rgba(255, 255, 255, 0.20);
+  --foreground: rgba(255, 255, 255, 0.9);
+  --foreground-secondary: rgba(255, 255, 255, 0.6);
+  --foreground-tertiary: rgba(255, 255, 255, 0.55);
+  --foreground-quaternary: rgba(255, 255, 255, 0.38);
   --glass-surface: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.08);
+  --divider: rgba(255, 255, 255, 0.04);
+  color-scheme: dark;
 }
 
 @theme {
@@ -18,6 +20,7 @@
   --color-foreground-quaternary: var(--foreground-quaternary);
   --color-glass-surface: var(--glass-surface);
   --color-glass-border: var(--glass-border);
+  --color-divider: var(--divider);
 }
 
 body {
@@ -25,20 +28,30 @@ body {
   background: var(--background);
 }
 
+/* Reveal: animate only opacity + transform (GPU-composited).
+   Replaced filter:blur with translateY for equivalent motion depth. */
 .reveal {
   opacity: 0;
-  filter: blur(5px);
-  transition: opacity 0.8s cubic-bezier(0.87, 0, 0.13, 1),
-              filter 0.8s cubic-bezier(0.87, 0, 0.13, 1);
+  transform: translateY(8px) translateZ(0);
+  will-change: opacity, transform;
+  transition:
+    opacity 0.8s cubic-bezier(0.87, 0, 0.13, 1),
+    transform 0.8s cubic-bezier(0.87, 0, 0.13, 1);
 }
 .reveal.visible {
   opacity: 1;
-  filter: blur(0);
+  transform: translateY(0) translateZ(0);
+  will-change: auto;
 }
 
+/* Chroma sweep: background-position is GPU-composited; no filter needed. */
 @keyframes chroma-sweep {
-  0% { background-position: 100% 0; filter: blur(1px); }
-  100% { background-position: 0 0; filter: blur(0); }
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
 }
 .chroma-text {
   background-size: 300% 100%;
@@ -47,19 +60,115 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.chroma-text.visible {
+/* Trigger when parent .reveal becomes visible (intersection observer) */
+.reveal.visible .chroma-text {
   animation: chroma-sweep 0.9s ease-in-out 0.1s forwards;
 }
 
 @keyframes circle-pulse {
-  0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.05); }
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
 }
 
-.cta-glow {
-  box-shadow: 0 0 30px rgba(255, 140, 0, 0.25);
-  transition: box-shadow 0.3s ease;
+.circle-pulse-ring {
+  animation: circle-pulse 4s ease-in-out infinite var(--pulse-delay, 0s);
 }
-.cta-glow:hover {
-  box-shadow: 0 0 50px rgba(255, 140, 0, 0.4);
+
+/* CTA glow: transition opacity on pseudo-elements rather than box-shadow
+   directly — avoids triggering a paint pass on every frame. */
+.cta-glow {
+  position: relative;
+  isolation: isolate;
+}
+.cta-glow::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  box-shadow: 0 0 30px rgba(255, 140, 0, 0.25);
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+.cta-glow:hover::after,
+.cta-glow:focus-visible::after {
+  opacity: 0;
+}
+.cta-glow::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  box-shadow: 0 0 50px rgba(255, 140, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+.cta-glow:hover::before,
+.cta-glow:focus-visible::before {
+  opacity: 1;
+}
+.cta-glow:focus-visible {
+  outline: 2px solid rgba(255, 140, 0, 0.8);
+  outline-offset: 3px;
+}
+
+/* Global focus-visible ring for nav links and carousel dots */
+a:focus-visible:not(.cta-glow),
+button:focus-visible:not(.cta-glow) {
+  outline: 2px solid rgba(255, 140, 0, 0.7);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Skip navigation link for keyboard users */
+.skip-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background: #ff8c00;
+  color: #000;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 0 0 0.5rem 0;
+  text-decoration: none;
+  translate: 0 -100%;
+  transition: translate 0.2s ease;
+}
+.skip-nav:focus {
+  translate: 0 0;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+  .chroma-text {
+    background-position: 0 0;
+  }
+  .reveal.visible .chroma-text {
+    animation: none;
+  }
+  .circle-pulse-ring {
+    animation: none;
+  }
+  .cta-glow::before,
+  .cta-glow::after {
+    transition: none;
+  }
 }

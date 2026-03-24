@@ -1,6 +1,9 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.4.8/schema.json",
-  "organizeImports": {
+  "files": {
+    "includes": ["app/**", "components/**", "hooks/**", "next.config.ts", "*.json"]
+  },
+  "assist": {
     "enabled": true
   },
   "linter": {
@@ -22,6 +25,12 @@
     "formatter": {
       "quoteStyle": "single",
       "semicolons": "asNeeded"
+    }
+  },
+  "css": {
+    "parser": {
+      "cssModules": false,
+      "tailwindDirectives": true
     }
   }
 }

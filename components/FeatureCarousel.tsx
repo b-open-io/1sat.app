@@ -1,8 +1,16 @@
-"use client"
+'use client'
 
-import { useRef, useState } from "react"
+import { useCallback, useId, useRef, useState } from 'react'
 
-interface Slide {
+// Hoisted to module scope — avoids creating new object on every render
+const scrollContainerStyle: React.CSSProperties = {
+  scrollbarWidth: 'none',
+  msOverflowStyle: 'none',
+}
+
+const slideItemStyle: React.CSSProperties = { minWidth: '100%' }
+
+export interface Slide {
   title: string
   description: string
 }
@@ -13,42 +21,49 @@ interface FeatureCarouselProps {
   gradientTo: string
 }
 
-export function FeatureCarousel({
-  slides,
-  gradientFrom,
-  gradientTo,
-}: FeatureCarouselProps) {
-  const scrollRef = useRef<HTMLDivElement>(null)
+export function FeatureCarousel({ slides, gradientFrom, gradientTo }: FeatureCarouselProps) {
+  const scrollRef = useRef<HTMLUListElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  const ticking = useRef(false)
+  const baseId = useId()
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
+    if (ticking.current) return
+    ticking.current = true
+    requestAnimationFrame(() => {
+      const el = scrollRef.current
+      if (el) {
+        const index = Math.round(el.scrollLeft / el.clientWidth)
+        setActiveIndex(index)
+      }
+      ticking.current = false
+    })
+  }, [])
+
+  const scrollTo = useCallback((index: number) => {
     const el = scrollRef.current
     if (!el) return
-    const index = Math.round(el.scrollLeft / el.clientWidth)
+    el.scrollTo({ left: index * el.clientWidth, behavior: 'smooth' })
     setActiveIndex(index)
-  }
-
-  const scrollTo = (index: number) => {
-    const el = scrollRef.current
-    if (!el) return
-    el.scrollTo({ left: index * el.clientWidth, behavior: "smooth" })
-    setActiveIndex(index)
-  }
+  }, [])
 
   return (
-    <div className="w-full">
+    <section className="w-full" aria-roledescription="carousel" aria-label="Feature slides">
       {/* Scroll container */}
-      <div
+      <ul
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none rounded-2xl list-none m-0 p-0"
+        style={scrollContainerStyle}
       >
         {slides.map((slide, i) => (
-          <div
-            key={i}
+          <li
+            key={slide.title}
+            id={`${baseId}-slide-${i}`}
             className="flex-none w-full snap-center px-2"
-            style={{ minWidth: "100%" }}
+            style={slideItemStyle}
+            aria-label={`${i + 1} of ${slides.length}: ${slide.title}`}
+            aria-hidden={i !== activeIndex}
           >
             <div
               className="relative rounded-2xl overflow-hidden border"
@@ -58,8 +73,9 @@ export function FeatureCarousel({
                 minHeight: 340,
               }}
             >
-              {/* Subtle top glow */}
+              {/* Subtle top glow — decorative */}
               <div
+                aria-hidden="true"
                 className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px"
                 style={{
                   background: `linear-gradient(90deg, transparent, ${gradientFrom}60, transparent)`,
@@ -68,8 +84,9 @@ export function FeatureCarousel({
 
               {/* Content */}
               <div className="relative z-10 p-8 md:p-10 flex flex-col gap-4">
-                {/* Slide number badge */}
+                {/* Slide number badge — decorative, screen readers get slide position from aria-label */}
                 <span
+                  aria-hidden="true"
                   className="self-start text-xs font-mono px-2.5 py-1 rounded-full border"
                   style={{
                     color: gradientFrom,
@@ -80,29 +97,24 @@ export function FeatureCarousel({
                   0{i + 1}
                 </span>
 
-                <h3
-                  className="text-2xl md:text-3xl font-semibold tracking-tight"
-                  style={{ color: "rgba(255,255,255,0.95)" }}
-                >
+                <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
                   {slide.title}
                 </h3>
 
-                <p
-                  className="text-base leading-relaxed max-w-lg"
-                  style={{ color: "rgba(255,255,255,0.55)" }}
-                >
+                <p className="text-base leading-relaxed max-w-lg text-foreground-secondary">
                   {slide.description}
                 </p>
               </div>
 
-              {/* Screenshot placeholder */}
+              {/* Decorative screenshot placeholder — hidden from assistive technology */}
               <div
+                aria-hidden="true"
                 className="absolute bottom-0 right-0 w-48 md:w-64 h-36 md:h-48 rounded-tl-2xl overflow-hidden"
                 style={{
                   background: `linear-gradient(135deg, ${gradientFrom}15, ${gradientTo}08)`,
                   border: `1px solid ${gradientFrom}20`,
-                  borderBottom: "none",
-                  borderRight: "none",
+                  borderBottom: 'none',
+                  borderRight: 'none',
                 }}
               >
                 {/* Simulated browser chrome */}
@@ -110,20 +122,18 @@ export function FeatureCarousel({
                   className="flex items-center gap-1.5 px-3 py-2 border-b"
                   style={{ borderColor: `${gradientFrom}15` }}
                 >
-                  {[gradientFrom, gradientTo, `${gradientFrom}80`].map(
-                    (color, ci) => (
-                      <div
-                        key={ci}
-                        className="w-2 h-2 rounded-full"
-                        style={{ background: color, opacity: 0.6 }}
-                      />
-                    ),
-                  )}
+                  {[gradientFrom, gradientTo, `${gradientFrom}80`].map((color) => (
+                    <div
+                      key={color}
+                      className="w-2 h-2 rounded-full"
+                      style={{ background: color, opacity: 0.6 }}
+                    />
+                  ))}
                 </div>
                 <div className="p-3 flex flex-col gap-2">
-                  {[70, 45, 60].map((w, li) => (
+                  {[70, 45, 60].map((w) => (
                     <div
-                      key={li}
+                      key={w}
                       className="h-1.5 rounded-full"
                       style={{
                         width: `${w}%`,
@@ -134,28 +144,30 @@ export function FeatureCarousel({
                 </div>
               </div>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
 
-      {/* Dot indicators */}
-      <div className="flex items-center justify-center gap-2 mt-6">
-        {slides.map((_, i) => (
+      {/* Pagination buttons */}
+      <nav className="flex items-center justify-center gap-2 mt-6" aria-label="Carousel pagination">
+        {slides.map((slide, i) => (
           <button
-            key={i}
+            key={slide.title}
             type="button"
             onClick={() => scrollTo(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            className="transition-all duration-300 rounded-full"
+            aria-label={`Go to slide ${i + 1}: ${slide.title}`}
+            aria-current={i === activeIndex ? 'true' : undefined}
+            aria-controls={`${baseId}-slide-${i}`}
+            className="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
             style={{
               width: i === activeIndex ? 24 : 6,
               height: 6,
-              background:
-                i === activeIndex ? gradientFrom : "rgba(255,255,255,0.2)",
+              background: i === activeIndex ? gradientFrom : 'rgba(255,255,255,0.2)',
+              transition: 'width 0.3s ease, background-color 0.3s ease',
             }}
           />
         ))}
-      </div>
-    </div>
+      </nav>
+    </section>
   )
 }

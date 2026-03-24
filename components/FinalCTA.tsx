@@ -1,104 +1,90 @@
-"use client"
+import { DOWNLOAD_URL } from '@/components/constants'
+import { DownloadIcon } from '@/components/DownloadIcon'
+import { RevealSection } from '@/components/effects/Reveal'
+import { externalLinkProps } from '@/components/link-utils'
 
-import { useReveal } from "@/hooks/useReveal"
+// Hoisted static style objects — avoids recreating on every render (rendering-hoist-jsx)
+const ambientGlowStyle: React.CSSProperties = {
+  background:
+    'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,140,0,0.12) 0%, transparent 70%)',
+}
+
+const softRingStyle: React.CSSProperties = {
+  width: '600px',
+  height: '600px',
+  background: 'radial-gradient(ellipse at center, rgba(255,140,0,0.08) 0%, transparent 65%)',
+}
+
+const headingFontStyle: React.CSSProperties = { fontSize: 'clamp(4rem, 12vw, 8rem)' }
+
+const gradientTextStyle: React.CSSProperties = {
+  background: 'linear-gradient(135deg, #FF8C00 0%, #FFD700 100%)',
+  backgroundClip: 'text',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+}
 
 export function FinalCTA() {
-  const ref = useReveal<HTMLElement>(0.15)
-
   return (
-    <section
-      ref={ref}
-      className="reveal relative w-full flex flex-col items-center justify-center text-center px-4 py-32 md:py-48 overflow-hidden"
+    <RevealSection
+      threshold={0.15}
+      className="relative w-full flex flex-col items-center justify-center text-center px-4 py-32 md:py-48 overflow-hidden"
     >
-      {/* Radial glow */}
+      {/* Ambient glow — decorative */}
       <div
+        aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,140,0,0.12) 0%, transparent 70%)",
-        }}
+        style={ambientGlowStyle}
       />
 
-      {/* Outer soft ring */}
+      {/* Soft outer ring — decorative */}
       <div
+        aria-hidden="true"
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
-        style={{
-          width: "600px",
-          height: "600px",
-          background:
-            "radial-gradient(ellipse at center, rgba(255,140,0,0.06) 0%, transparent 65%)",
-          filter: "blur(40px)",
-        }}
+        style={softRingStyle}
       />
 
-      {/* Content */}
       <div className="relative z-10 flex flex-col items-center gap-6">
+        {/*
+          The full heading is "1Sat. Own it all." — announced as one phrase by
+          screen readers via the visually-hidden sr-only span.  The two visual
+          lines are aria-hidden so AT doesn't double-announce them.
+        */}
         <h2
           className="font-mono font-semibold leading-none tracking-tight"
-          style={{
-            fontSize: "clamp(4rem, 12vw, 8rem)",
-            color: "rgba(255,255,255,0.95)",
-            fontFamily: "var(--font-geist-mono)",
-          }}
+          style={headingFontStyle}
         >
-          1Sat.
+          {/* Accessible text — shown to screen readers only */}
+          <span className="sr-only">1Sat. Own it all.</span>
+
+          {/* Visual first line */}
+          <span aria-hidden="true" className="block text-foreground">
+            1Sat.
+          </span>
+
+          {/* Visual gradient second line */}
+          <span aria-hidden="true" className="block" style={gradientTextStyle}>
+            Own it all.
+          </span>
         </h2>
 
-        <p
-          className="font-mono font-semibold leading-none tracking-tight"
-          style={{
-            fontSize: "clamp(4rem, 12vw, 8rem)",
-            fontFamily: "var(--font-geist-mono)",
-            background: "linear-gradient(135deg, #FF8C00 0%, #FFD700 100%)",
-            backgroundClip: "text",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          Own it all.
-        </p>
-
-        <p
-          className="text-base md:text-lg max-w-sm mt-2 leading-relaxed"
-          style={{ color: "rgba(255,255,255,0.4)" }}
-        >
-          The browser built for the open web. No subscriptions. No data
-          brokers. Just you.
+        <p className="text-base md:text-lg max-w-sm mt-2 leading-relaxed text-foreground-secondary">
+          The browser built for the open web. No subscriptions. No data brokers. Just you.
         </p>
 
         <a
-          href="https://github.com/b-open-io/1sat-sdk/releases"
-          className="mt-4 flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold text-white cta-glow transition-all duration-300 text-base"
-          style={{
-            background: "linear-gradient(135deg, #FF8C00 0%, #FFD700 100%)",
-            fontFamily: "var(--font-geist-sans)",
-          }}
+          href={DOWNLOAD_URL}
+          {...externalLinkProps('Download 1Sat Browser for Mac')}
+          className="mt-4 flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold text-black cta-glow text-base bg-gradient-to-br from-[#FF8C00] to-[#FFD700]"
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="opacity-80"
-          >
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
+          <DownloadIcon size={16} />
           Download for Mac
         </a>
 
-        <span
-          className="text-xs mt-1"
-          style={{ color: "rgba(255,255,255,0.2)" }}
-        >
-          macOS 14+ · Free · Open Source
+        <span className="text-xs mt-1 text-foreground-tertiary">
+          macOS 14+ &middot; Free &middot; Open Source
         </span>
       </div>
-    </section>
+    </RevealSection>
   )
 }

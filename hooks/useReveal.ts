@@ -1,6 +1,4 @@
-"use client"
-
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from 'react'
 
 export function useReveal<T extends HTMLElement = HTMLDivElement>(threshold = 0.15) {
   const ref = useRef<T>(null)
@@ -9,10 +7,17 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(threshold = 0.
     const el = ref.current
     if (!el) return
 
+    // Respect user preference for reduced motion — skip animation entirely
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) {
+      el.classList.add('visible')
+      return
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          el.classList.add("visible")
+          el.classList.add('visible')
           observer.unobserve(el)
         }
       },
