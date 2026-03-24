@@ -46,7 +46,7 @@ export function FinalCTA() {
 
       <div className="relative z-10 flex flex-col items-center gap-6">
         {/*
-          The full heading is "1Sat. Own it all." — announced as one phrase by
+          The full heading is "1Sat. Take the keys." — announced as one phrase by
           screen readers via the visually-hidden sr-only span.  The two visual
           lines are aria-hidden so AT doesn't double-announce them.
         */}
@@ -55,7 +55,7 @@ export function FinalCTA() {
           style={headingFontStyle}
         >
           {/* Accessible text — shown to screen readers only */}
-          <span className="sr-only">1Sat. Own it all.</span>
+          <span className="sr-only">1Sat. Take the keys.</span>
 
           {/* Visual first line */}
           <span aria-hidden="true" className="block text-foreground">
@@ -64,7 +64,7 @@ export function FinalCTA() {
 
           {/* Visual gradient second line */}
           <span aria-hidden="true" className="block" style={gradientTextStyle}>
-            Own it all.
+            Take the keys.
           </span>
         </h2>
 
