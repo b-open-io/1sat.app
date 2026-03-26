@@ -1,7 +1,6 @@
 import { DOWNLOAD_URL } from '@/components/constants'
 import { DownloadIcon } from '@/components/DownloadIcon'
 import { RevealSection } from '@/components/effects/Reveal'
-import { externalLinkProps } from '@/components/link-utils'
 
 // Hoisted static style objects — avoids recreating on every render (rendering-hoist-jsx)
 const ambientGlowStyle: React.CSSProperties = {
@@ -74,7 +73,7 @@ export function FinalCTA() {
 
         <a
           href={DOWNLOAD_URL}
-          {...externalLinkProps('Download 1Sat Browser for Mac')}
+          aria-label="Download 1Sat Browser for Mac"
           className="mt-4 flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold text-black cta-glow text-base bg-gradient-to-br from-[#FF8C00] to-[#FFD700]"
         >
           <DownloadIcon size={16} />

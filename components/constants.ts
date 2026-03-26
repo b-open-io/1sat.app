@@ -1,1 +1,1 @@
-export const DOWNLOAD_URL = '/download/macos'
+export const DOWNLOAD_URL = '/download'

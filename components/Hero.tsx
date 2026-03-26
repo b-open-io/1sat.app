@@ -76,9 +76,7 @@ export function Hero() {
         </p>
         <a
           href={DOWNLOAD_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Download 1Sat Browser for Mac (opens in new tab)"
+          aria-label="Download 1Sat Browser for Mac"
           className="cta-glow mt-8 inline-block rounded-full bg-gradient-to-br from-[#FF8C00] to-[#FFD700] px-9 py-3.5 text-sm font-semibold text-black"
         >
           Download for Mac

@@ -109,9 +109,7 @@ export function Nav() {
 
       <a
         href={DOWNLOAD_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Download 1Sat for Mac (opens in new tab)"
+        aria-label="Download 1Sat for Mac"
         className="pointer-events-auto flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-black cta-glow bg-gradient-to-br from-[#FF8C00] to-[#FFD700]"
       >
         <DownloadIcon />
