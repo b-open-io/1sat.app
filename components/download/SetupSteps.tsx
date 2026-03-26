@@ -18,8 +18,8 @@ const steps = [
     description: (
       <>
         Import bookmarks from your old browser, or start fresh. Configure your{' '}
-        <span className="text-foreground font-medium">local stack options</span> — node connection,
-        indexer preferences, and network settings.
+        <span className="text-foreground font-medium">local stack options</span> — indexer
+        preferences, default apps, and network settings.
       </>
     ),
   },
