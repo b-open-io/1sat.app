@@ -10,7 +10,7 @@ const faqs = [
   },
   {
     q: 'How is this different from Chrome with a wallet extension?',
-    a: "Extensions are sandboxed and limited. 1Sat integrates wallet, identity, and AI at the browser level — no popups, no middlemen. Transactions are signed in the Secure Enclave, not in a JavaScript sandbox.",
+    a: 'Extensions are sandboxed and limited. 1Sat integrates wallet, identity, and AI at the browser level — no popups, no middlemen. Transactions are signed in the Secure Enclave, not in a JavaScript sandbox.',
   },
   {
     q: 'Is my data private?',

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import { Nav } from '@/components/Nav'
-import { Footer } from '@/components/Footer'
-import { SetupSteps } from '@/components/download/SetupSteps'
 import { FAQ } from '@/components/download/FAQ'
+import { SetupSteps } from '@/components/download/SetupSteps'
+import { Footer } from '@/components/Footer'
+import { Nav } from '@/components/Nav'
 import { DownloadClient } from './DownloadClient'
 
 export const metadata: Metadata = {
@@ -18,7 +18,10 @@ export default function DownloadPage() {
 
       {/* Hero */}
       <section className="pt-32 pb-16 px-4 text-center max-w-3xl mx-auto">
-        <h1 className="font-mono font-bold leading-tight" style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)' }}>
+        <h1
+          className="font-mono font-bold leading-tight"
+          style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)' }}
+        >
           <span className="text-foreground">Getting started with </span>
           <span className="bg-gradient-to-r from-[#FF8C00] to-[#FFD700] bg-clip-text text-transparent">
             1Sat
