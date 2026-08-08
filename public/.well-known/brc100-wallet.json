@@ -1,0 +1,15 @@
+{
+  "name": "1Sat Wallet",
+  "icon": "https://1sat.app/icon-512.png",
+  "sessionBase": "https://1sat.app/brc100",
+  "platforms": ["ios", "macos"],
+  "methods": [
+    "createAction",
+    "internalizeAction",
+    "getPublicKey",
+    "createSignature",
+    "encrypt",
+    "decrypt",
+    "listOutputs"
+  ]
+}

@@ -32,6 +32,16 @@ const nextConfig: NextConfig = {
         },
       ],
     },
+    {
+      // The association file has no extension, so it would otherwise be served as
+      // octet-stream. With the global nosniff header that makes iOS reject it, and every
+      // Universal Link silently falls back to opening this site in Safari instead.
+      source: '/.well-known/apple-app-site-association',
+      headers: [
+        { key: 'Content-Type', value: 'application/json' },
+        { key: 'Cache-Control', value: 'public, max-age=3600' },
+      ],
+    },
   ],
 }
 

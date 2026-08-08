@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["V5RN73K59J.app.onesat.wallet"],
+        "components": [
+          {
+            "/": "/brc100/*",
+            "comment": "BRC-100 wallet requests: /brc100/pay and /brc100/result"
+          }
+        ]
+      }
+    ]
+  }
+}
