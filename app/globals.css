@@ -172,3 +172,10 @@ button:focus-visible:not(.cta-glow) {
     transition: none;
   }
 }
+
+:root {
+  --brand: #f0bb00;
+}
+@theme inline {
+  --color-brand: var(--brand);
+}

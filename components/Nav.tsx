@@ -57,7 +57,8 @@ Ask your AI: "Use the 1sat-stack skill to fetch ordinals for an address" or "Use
 `
 
 const navLinks = [
-  { label: 'Features', href: '/#features' },
+  { label: 'Infrastructure', href: '/' },
+  { label: 'Features', href: '/browser#features' },
   { label: 'Changelog', href: '/changelog' },
   { label: 'GitHub', href: 'https://github.com/b-open-io/1sat-sdk', external: true },
 ]

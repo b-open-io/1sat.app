@@ -6,9 +6,9 @@ import './globals.css'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://1sat.app'),
-  title: '1Sat Browser — Your keys. Your data. Your internet.',
+  title: '1Sat — Bitcoin infrastructure',
   description:
-    'The browser that pays you back. Browse, collect, and own your internet with Secure Enclave protection, on-chain publishing, and native dApp connectivity.',
+    'Public APIs and indexers for 1Sat Ordinals on BSV: unified indexing, transaction broadcast, wallet hosting, encrypted messaging, and identity overlays.',
   keywords: [
     'BSV',
     'Bitcoin SV',
@@ -39,11 +39,11 @@ export const metadata: Metadata = {
     canonical: 'https://1sat.app',
   },
   openGraph: {
-    title: '1Sat Browser — Your keys. Your data. Your internet.',
+    title: '1Sat — Bitcoin infrastructure',
     description:
-      'The browser that pays you back. Browse, collect, and own your internet with Secure Enclave protection, on-chain publishing, and native dApp connectivity.',
+      'Public APIs and indexers for 1Sat Ordinals on BSV: unified indexing, transaction broadcast, wallet hosting, encrypted messaging, and identity overlays.',
     url: 'https://1sat.app',
-    siteName: '1Sat Browser',
+    siteName: '1Sat',
     type: 'website',
     images: [
       {
@@ -56,9 +56,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '1Sat Browser — Your keys. Your data. Your internet.',
+    title: '1Sat — Bitcoin infrastructure',
     description:
-      'The browser that pays you back. Browse, collect, and own your internet with Secure Enclave protection, on-chain publishing, and native dApp connectivity.',
+      'Public APIs and indexers for 1Sat Ordinals on BSV: unified indexing, transaction broadcast, wallet hosting, encrypted messaging, and identity overlays.',
     images: ['/og-image.jpg'],
   },
   icons: {
@@ -76,8 +76,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="theme-color" content="#050505" />
         <meta name="color-scheme" content="dark" />
-        {/* Preload hero video so the WebGL background renders sooner */}
-        <link rel="preload" href="/videos/hero-bg.mp4" as="video" type="video/mp4" />
         {/* DNS prefetch for external links */}
         <link rel="dns-prefetch" href="https://github.com" />
         <link rel="dns-prefetch" href="https://twitter.com" />

@@ -11,6 +11,8 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactCompiler: false,
   turbopack: {
+    // Stray lockfiles above the repo make Next infer the wrong workspace root
+    root: __dirname,
     resolveAlias: {
       '@': './',
     },
