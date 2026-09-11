@@ -1,112 +1,62 @@
-/**
- * OPL-4696 — cancel wallet-owned OrdLock listings on load / BSV sweep.
- * Create stays off. Buy and explicit cancel stay on.
- */
+import { type CancelOwnedListingsResult, cancelOwnedListings, createContext } from '@1sat/actions'
+import type { WalletInterface } from '@bsv/sdk'
 
-export const ORDLOCK_TAG = 'ordlock'
+export type CancelResult = CancelOwnedListingsResult
+export const WALLET_CHANGED_MESSAGE =
+  'Wallet account changed. Select the account and retry delisting.'
 
-export type ListedOut = {
-  outpoint: string
-  tags?: string[]
-}
+// Serialize mounts/retries for one provider. Failed passes never suppress a later retry.
+const running = new WeakMap<WalletInterface, Promise<CancelResult>>()
 
-export type CancelResult = {
-  attempted: number
-  cancelled: number
-  skipped: number
-  txids: string[]
-  errors: string[]
-}
-
-export type WalletPort = {
-  listOrdLock: () => Promise<ListedOut[]>
-  cancelListing: (outpoint: string, id?: string) => Promise<{ txid?: string; error?: string }>
-}
-
-const ran = new Set<string>()
-
-export function readAssetIdTag(tags: string[] | undefined): string | undefined {
-  if (!tags) return undefined
-  for (const t of tags) {
-    if (t.startsWith('id:')) return t.slice(3)
-  }
-  return undefined
-}
-
-export function isOrdLockListed(output: { tags?: string[] }): boolean {
-  return output.tags?.includes(ORDLOCK_TAG) ?? false
-}
-
-export function resetCancelSessions(): void {
-  ran.clear()
-}
-
-function empty(): CancelResult {
-  return { attempted: 0, cancelled: 0, skipped: 0, txids: [], errors: [] }
-}
-
-/** Cancel listed OrdLock UTXOs the wallet controls. Fail soft. */
-export async function cancelOwnedOrdLockListings(
-  wallet: WalletPort,
-  options?: { sessionKey?: string; force?: boolean; limit?: number },
-): Promise<CancelResult> {
-  const result = empty()
-  const key = options?.sessionKey
-  if (key && !options?.force && ran.has(key)) return result
-  if (key) ran.add(key)
-
-  try {
-    const listed = (await wallet.listOrdLock()).filter(isOrdLockListed)
-    const cap = options?.limit ?? 25
-    for (const row of listed.slice(0, cap)) {
-      const id = readAssetIdTag(row.tags)
-      if (!id) {
-        result.skipped += 1
-        result.errors.push(`${row.outpoint}: missing-id`)
-        continue
+/** Check the captured account before each native call, including signing and fee funding. */
+function accountWallet(
+  wallet: WalletInterface,
+  identity: string,
+  signal?: AbortSignal,
+): WalletInterface {
+  return new Proxy(wallet, {
+    get(target, property) {
+      const method = Reflect.get(target, property)
+      if (typeof method !== 'function') return method
+      return async (...args: unknown[]) => {
+        // Native action cleanup may still need to release an unsigned transaction after a stop.
+        if (property !== 'abortAction') signal?.throwIfAborted()
+        const current = await wallet.getPublicKey({ identityKey: true })
+        if (current.publicKey !== identity) throw new Error(WALLET_CHANGED_MESSAGE)
+        if (property !== 'abortAction') signal?.throwIfAborted()
+        return Reflect.apply(method, wallet, args)
       }
-      result.attempted += 1
-      try {
-        const res = await wallet.cancelListing(row.outpoint, id)
-        if (res.error || !res.txid) {
-          result.errors.push(`${row.outpoint}: ${res.error ?? 'cancel-failed'}`)
-          continue
-        }
-        result.cancelled += 1
-        result.txids.push(res.txid)
-      } catch (err) {
-        result.errors.push(`${row.outpoint}: ${err instanceof Error ? err.message : String(err)}`)
-      }
-    }
-  } catch (err) {
-    result.errors.push(err instanceof Error ? err.message : String(err))
-  }
-
-  return result
-}
-
-/**
- * BSV sweep: cancel listed OrdLock first (cancel→BRC-100), then optional sweep
- * (cancel→new address / continue send-all). Sweep errors do not undo cancels.
- */
-export async function cancelThenSweep(
-  wallet: WalletPort | null,
-  sweep?: () => Promise<void>,
-): Promise<CancelResult & { swept: boolean }> {
-  if (!wallet) return { ...empty(), swept: false }
-  const cancel = await cancelOwnedOrdLockListings(wallet, {
-    sessionKey: 'bsv-sweep',
-    force: true,
+    },
   })
-  if (!sweep) return { ...cancel, swept: false }
+}
+
+/** Native actions discover both baskets completely and retain partial receipts on failure. */
+export async function cancelOwnedOrdLockListings(
+  wallet: WalletInterface,
+  options: { signal?: AbortSignal; identityKey?: string } = {},
+): Promise<CancelResult> {
+  const previous = running.get(wallet)
+  const task = Promise.resolve(previous)
+    .then(async () => {
+      options.signal?.throwIfAborted()
+      const identity =
+        options.identityKey ?? (await wallet.getPublicKey({ identityKey: true })).publicKey
+      if (!identity) throw new Error('The wallet did not return an account identity.')
+      const context = createContext(accountWallet(wallet, identity, options.signal))
+      // Omit custom funding: createAction/signAction use the wallet's native fee and approval flow.
+      return cancelOwnedListings.execute(context, { signal: options.signal })
+    })
+    .catch(
+      (error): CancelResult => ({
+        cancelled: 0,
+        txids: [],
+        errors: [error instanceof Error ? error.message : String(error)],
+      }),
+    )
+  running.set(wallet, task)
   try {
-    await sweep()
-    return { ...cancel, swept: true }
-  } catch (err) {
-    return {
-      ...cancel,
-      swept: false,
-      errors: [...cancel.errors, err instanceof Error ? err.message : String(err)],
-    }
+    return await task
+  } finally {
+    if (running.get(wallet) === task) running.delete(wallet)
   }
 }
