@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useReducer, useRef, useState } from 'react'
 import {
   type CancelResult,
   cancelOwnedOrdLockListings,
   WALLET_CHANGED_MESSAGE,
 } from '@/lib/cancel-ordlock'
+import { delistingReceipts, EMPTY_DELISTING_RECEIPTS } from '@/lib/delisting-receipts'
 import { ORDLOCK_CANCEL_ENABLED, ORDLOCK_CANCEL_ON_LOAD } from '@/lib/ordlock'
 import { detectWalletPort } from '@/lib/wallet-port'
 
@@ -19,6 +20,7 @@ type View = {
 export function OrdLockCancelOnLoad() {
   const [attempt, setAttempt] = useState(0)
   const [view, setView] = useState<View>({ phase: 'checking' })
+  const [receipts, updateReceipts] = useReducer(delistingReceipts, EMPTY_DELISTING_RECEIPTS)
   const stop = useRef<AbortController | null>(null)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: the retry counter intentionally starts a fresh account-bound run.
@@ -27,16 +29,20 @@ export function OrdLockCancelOnLoad() {
     const controller = new AbortController()
     stop.current = controller
     let active = true
+    let accountChanged = false
     let checking = false
     const wallet = detectWalletPort()
     let identity: string | undefined
     const show = (next: View) => {
-      if (active) setView(next)
+      if (active && !accountChanged) setView(next)
     }
     const changed = () => {
+      accountChanged = true
       controller.abort()
-      if (active)
-        setView((current) => ({ ...current, phase: 'error', message: WALLET_CHANGED_MESSAGE }))
+      if (active) {
+        updateReceipts({ type: 'clear' })
+        setView({ phase: 'error', message: WALLET_CHANGED_MESSAGE })
+      }
     }
     const checkAccount = async () => {
       if (!active || !wallet || !identity || controller.signal.aborted || checking) return
@@ -55,6 +61,7 @@ export function OrdLockCancelOnLoad() {
       }
     }
     const run = async () => {
+      updateReceipts({ type: 'checking', wallet })
       show({ phase: 'checking' })
       if (!wallet) {
         show({ phase: 'unavailable' })
@@ -62,21 +69,27 @@ export function OrdLockCancelOnLoad() {
       }
       try {
         if (!(await wallet.isAuthenticated({})).authenticated) {
+          if (active) updateReceipts({ type: 'clear' })
           show({ phase: 'locked' })
           return
         }
       } catch {
+        if (active) updateReceipts({ type: 'clear' })
         show({ phase: 'locked' })
         return
       }
       controller.signal.throwIfAborted()
       identity = (await wallet.getPublicKey({ identityKey: true })).publicKey
       controller.signal.throwIfAborted()
+      if (!active || accountChanged) return
+      updateReceipts({ type: 'account', wallet, identity })
       show({ phase: 'running' })
       const result = await cancelOwnedOrdLockListings(wallet, {
         signal: controller.signal,
         identityKey: identity,
       })
+      if (!active || accountChanged) return
+      updateReceipts({ type: 'completed', wallet, identity, txids: result.txids })
       if (controller.signal.aborted) {
         show({
           phase: 'error',
@@ -125,7 +138,8 @@ export function OrdLockCancelOnLoad() {
         )}
         {view.result && (
           <p>
-            {view.result.cancelled} listing{view.result.cancelled === 1 ? '' : 's'} cancelled.{' '}
+            {view.result.cancelled} listing{view.result.cancelled === 1 ? '' : 's'} cancelled this
+            pass.{' '}
             {view.result.errors.length
               ? 'Some listings remain unresolved.'
               : 'This pass finished without errors.'}
@@ -133,11 +147,11 @@ export function OrdLockCancelOnLoad() {
         )}
         {view.message && <p className="mt-2">{view.message}</p>}
       </div>
-      {view.result && view.result.txids.length > 0 && (
+      {receipts.txids.length > 0 && (
         <details className="mt-3 text-xs text-foreground-secondary">
-          <summary>Completed transactions ({view.result.txids.length})</summary>
+          <summary>Completed transactions ({receipts.txids.length})</summary>
           <ul className="mt-2 space-y-1 break-all">
-            {[...new Set(view.result.txids)].map((txid) => (
+            {receipts.txids.map((txid) => (
               <li key={txid}>{txid}</li>
             ))}
           </ul>
