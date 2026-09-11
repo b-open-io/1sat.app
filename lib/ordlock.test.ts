@@ -5,8 +5,9 @@ import {
   listingCreateDisabledBody,
   ORDLOCK_BUY_ENABLED,
   ORDLOCK_CANCEL_ENABLED,
+  ORDLOCK_CANCEL_ON_LOAD,
+  ORDLOCK_CANCEL_ON_SWEEP,
   ORDLOCK_LISTING_DISABLED,
-  ORDLOCK_WALLET_RUNTIME,
 } from '@/lib/ordlock'
 
 describe('ordlock listing create-off', () => {
@@ -16,8 +17,9 @@ describe('ordlock listing create-off', () => {
     expect(ORDLOCK_CANCEL_ENABLED).toBe(true)
   })
 
-  test('this host has no wallet/sweep runtime (OPL-4696 N/A here)', () => {
-    expect(ORDLOCK_WALLET_RUNTIME).toBe(false)
+  test('cancel on load/sweep stays on (OPL-4696)', () => {
+    expect(ORDLOCK_CANCEL_ON_LOAD).toBe(true)
+    expect(ORDLOCK_CANCEL_ON_SWEEP).toBe(true)
   })
 
   test('assertListingCreateAllowed throws', () => {

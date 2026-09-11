@@ -2,6 +2,7 @@ import { GeistMono } from 'geist/font/mono'
 import { GeistPixelLine } from 'geist/font/pixel'
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next'
+import { OrdLockCancelOnLoad } from '@/components/OrdLockCancelOnLoad'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main-content" className="skip-nav">
           Skip to main content
         </a>
+        <OrdLockCancelOnLoad />
         {children}
       </body>
     </html>

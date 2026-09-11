@@ -4,11 +4,11 @@ export const ORDLOCK_LISTING_DISABLED = true
 export const ORDLOCK_BUY_ENABLED = true
 export const ORDLOCK_CANCEL_ENABLED = true
 
-/**
- * This host is infra/marketing only — no wallet or sweep runtime.
- * Cancel-on-load / BSV sweep lives on wallet surfaces (OPL-4696).
- */
-export const ORDLOCK_WALLET_RUNTIME = false
+/** OPL-4696 — cancel listed OrdLock UTXOs when an injected wallet is already loaded. */
+export const ORDLOCK_CANCEL_ON_LOAD = true
+
+/** OPL-4696 — cancel listed OrdLock first on BSV sweep (cancel→BRC-100). */
+export const ORDLOCK_CANCEL_ON_SWEEP = true
 
 export const LISTING_CREATE_OFF_MESSAGE =
   'OrdLock listing create is disabled pending a replacement contract. Existing listings can still be bought or cancelled.'
