@@ -5,8 +5,9 @@ import { DOWNLOAD_URL } from '@/components/constants'
 import { DownloadIcon } from '@/components/DownloadIcon'
 import { LogoMark } from '@/components/LogoMark'
 import { externalLinkProps } from '@/components/link-utils'
+import { ORDLOCK_LISTING_DISABLED } from '@/lib/ordlock'
 
-const DOCS_PROMPT = `# 1Sat SDK — AI Developer Setup
+export const DOCS_PROMPT = `# 1Sat SDK — AI Developer Setup
 
 ## 1. Load context (any LLM)
 Fetch the project context file to give your AI assistant full SDK knowledge:
@@ -27,14 +28,14 @@ npx skills add https://github.com/b-open-io/1sat-sdk --skill <skill-name>
 | Skill | What it does |
 |-------|-------------|
 | 1sat-stack | Unified BSV indexing API — UTXOs, inscriptions, ordinals, token balances |
-| 1sat-cli | CLI tool for wallet ops, minting, tokens, listings from the terminal |
-| ordinals-marketplace | List, buy, cancel ordinal listings on the marketplace |
+| 1sat-cli | CLI tool for wallet ops, minting, tokens, buy/cancel listings from the terminal |
+| ordinals-marketplace | ${ORDLOCK_LISTING_DISABLED ? 'Buy and cancel existing ordinal listings (create is off)' : 'List, buy, cancel ordinal listings on the marketplace'} |
 | token-operations | BSV21 token deployment, minting, transfers |
 | transaction-building | Build BSV transactions — payments, OP_RETURN, custom scripts |
 | wallet-setup | Create wallets, sync addresses, configure storage, restore from backup |
 | wallet-create-ordinals | Mint ordinals and inscribe files from a wallet |
 | dapp-connect | Connect dApps to 1Sat wallet via popup or browser extension |
-| sweep-import | Sweep/import UTXOs and ordinals from external wallets |
+| sweep-import | Sweep/import UTXOs and ordinals; cancel listed OrdLock UTXOs on load/sweep |
 | opns-names | Register and manage OpNS (on-chain DNS) names |
 | timelock | Lock BSV with time-based release conditions |
 | extract-blockchain-media | Extract inscribed media (images, videos, files) from transactions |
