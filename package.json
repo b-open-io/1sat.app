@@ -12,7 +12,7 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@1sat/actions": "0.0.213",
+    "@1sat/actions": "0.0.221",
     "@bsv/sdk": "2.6.0",
     "geist": "^1.7.0",
     "next": "^16.0.1",
